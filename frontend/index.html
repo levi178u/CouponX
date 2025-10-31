@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CouponX MVP</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 20px; }
+    input, button { padding: 8px; margin: 4px; }
+    .card { border: 1px solid #ddd; padding: 12px; border-radius: 8px; margin: 8px 0; }
+  </style>
+  <script type="module" src="./src/main.js"></script>
+  </head>
+<body>
+  <h1>CouponX MVP</h1>
+  <div id="jwt">Not logged in</div>
+  <div class="card" id="auth-card">
+    <input id="email" placeholder="email for dev login" />
+    <button id="dev-login">Dev Login</button>
+    <button id="google-login">Google Login</button>
+  </div>
+  <div class="card" id="wallet-card">
+    <div id="wallet">Balance: 0¢</div>
+    <input id="amount" type="number" placeholder="Top-up cents" />
+    <button id="topup">Top-up</button>
+  </div>
+  <div class="card" id="list-card">
+    <h3>List Coupon</h3>
+    <input id="platform" placeholder="Platform (Swiggy, Zomato, etc.)" />
+    <input id="code" placeholder="Code" />
+    <input id="price" type="number" placeholder="Price cents" />
+    <input id="desc" placeholder="Description" />
+    <button id="list">List</button>
+  </div>
+  <h3>Available Coupons</h3>
+  <div id="coupons"></div>
+</body>
+</html>
+
+
