@@ -1,15 +1,17 @@
 import mongoose from 'mongoose';
 import { config } from './config';
 
-let isConnected = false;
+export async function connectMongo(): Promise<void> {
+  const uri = config.mongodbUri;
+  if (!uri) {
+    throw new Error('MONGODB_URI is not defined');
+  }
 
-export async function connectMongo(): Promise<typeof mongoose> {
-  if (isConnected) return mongoose;
-  const uri = process.env.MONGODB_URI;
-  await mongoose.connect(uri, { dbName: uri.split('/').pop() });
-  isConnected = true;
-  return mongoose;
+  try {
+    await mongoose.connect(uri);
+    console.log('MongoDB connected successfully');
+  } catch (err) {
+    console.error('MongoDB connection failed', err);
+    throw err;
+  }
 }
-
-
-
