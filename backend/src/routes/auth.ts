@@ -33,7 +33,7 @@ if (config.googleClientId && config.googleClientSecret) {
       await connectMongo();
       const email = profile.emails && profile.emails[0]?.value;
       const name = profile.displayName;
-      const avatar = profile.photos && profile.photos[0]?.value; // ignored in schema
+      const avatar = profile.photos && profile.photos[0]?.value; 
 
       let user = await UserModel.findOne({ $or: [{ googleId: profile.id }, { email }] });
       if (!user) {
@@ -62,7 +62,6 @@ router.get('/google/callback', (req, res, next) => {
   })(req, res, next);
 });
 
-// Dev-only email login for local testing without Google credentials
 router.post('/dev-login', async (req, res) => {
   const { email, name } = req.body || {};
   if (!email) return res.status(400).json({ error: 'email required' });
