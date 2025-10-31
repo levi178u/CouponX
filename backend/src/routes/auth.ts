@@ -9,11 +9,22 @@ import { WalletModel } from '../models/Wallet';
 
 const router = express.Router();
 
-passport.serializeUser((user: any, done) => {
+interface SerializedUser {
+  id: string;
+  email?: string;
+  name?: string;
+}
+
+passport.serializeUser((user: SerializedUser, done: (error: any, id?: string) => void) => {
   done(null, user.id);
 });
 
-passport.deserializeUser(async (id: string, done) => {
+interface DeserializedUser {
+  email?: string;
+  name?: string;
+}
+
+passport.deserializeUser(async (id: string, done: (error: any, user?: DeserializedUser | false) => void) => {
   try {
     await connectMongo();
     const user = await UserModel.findById(id).select('email name').lean();
@@ -47,22 +58,43 @@ if (config.googleClientId && config.googleClientSecret) {
   }));
 }
 
-router.get('/google', (req, res, next) => {
+router.get('/google', (
+  req: express.Request, 
+  res: express.Response, 
+  next: express.NextFunction
+) => {
   if (!config.googleClientId) return res.status(501).json({ error: 'Google OAuth not configured' });
   return passport.authenticate('google', { scope: ['profile', 'email'] })(req, res, next);
 });
 
-router.get('/google/callback', (req, res, next) => {
+router.get('/google/callback', (req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (!config.googleClientId) return res.status(501).json({ error: 'Google OAuth not configured' });
-  return passport.authenticate('google', { session: false }, async (err, user: any) => {
+  return passport.authenticate('google', { session: false }, async (err: Error | null, user: SerializedUser | false, info?: any) => {
     if (err || !user) return res.redirect(`${config.corsOrigin}/login?error=oauth_failed`);
-    const token = jwt.sign({ id: user.id, email: user.email, name: user.name }, config.jwtSecret, { expiresIn: '7d' });
-    const target = `${config.corsOrigin}/auth/callback#token=${token}`;
+    const token: string = jwt.sign({ id: user.id, email: user.email, name: user.name }, config.jwtSecret, { expiresIn: '7d' });
+    const target: string = `${config.corsOrigin}/auth/callback#token=${token}`;
     return res.redirect(target);
   })(req, res, next);
 });
 
-router.post('/dev-login', async (req, res) => {
+interface DevLoginRequest {
+  email: string;
+  name?: string;
+}
+
+interface DevLoginResponse {
+  token: string;
+  user: {
+    id: string;
+    email: string;
+    name?: string;
+  }
+}
+
+router.post('/dev-login', async (
+  req: express.Request<{}, {}, DevLoginRequest>,
+  res: express.Response<DevLoginResponse | { error: string }>
+) => {
   const { email, name } = req.body || {};
   if (!email) return res.status(400).json({ error: 'email required' });
   await connectMongo();
