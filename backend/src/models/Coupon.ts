@@ -12,8 +12,9 @@ const CouponSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-// export type CouponDoc = mongoose.InferSchemaType<typeof CouponSchema> & { _id: mongoose.Types.ObjectId };
+export type CouponDoc = mongoose.InferSchemaType<typeof CouponSchema> & { _id: mongoose.Types.ObjectId };
 export const CouponModel = mongoose.model('Coupon', CouponSchema);
+
 
 
 

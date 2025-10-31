@@ -10,8 +10,9 @@ const TradeSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now }
 });
 
-// export type TradeDoc = mongoose.InferSchemaType<typeof TradeSchema> & { _id: mongoose.Types.ObjectId };
+export type TradeDoc = mongoose.InferSchemaType<typeof TradeSchema> & { _id: mongoose.Types.ObjectId };
 export const TradeModel = mongoose.model('Trade', TradeSchema);
+
 
 
 

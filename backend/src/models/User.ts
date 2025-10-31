@@ -7,8 +7,9 @@ const UserSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-// export type UserDoc = mongoose.InferSchemaType<typeof UserSchema> & { _id: mongoose.Types.ObjectId };
+export type UserDoc = mongoose.InferSchemaType<typeof UserSchema> & { _id: mongoose.Types.ObjectId };
 export const UserModel = mongoose.model('User', UserSchema);
+
 
 
 

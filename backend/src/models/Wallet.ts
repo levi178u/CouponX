@@ -6,8 +6,9 @@ const WalletSchema = new mongoose.Schema({
   holdCents: { type: Number, default: 0 }
 });
 
-// export type WalletDoc = mongoose.InferSchemaType<typeof WalletSchema> & { _id: mongoose.Types.ObjectId };
+export type WalletDoc = mongoose.InferSchemaType<typeof WalletSchema> & { _id: mongoose.Types.ObjectId };
 export const WalletModel = mongoose.model('Wallet', WalletSchema);
+
 
 
 
