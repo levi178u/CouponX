@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { config } from '../config';
 
 export interface AuthRequest extends Request {
+  headers: Request['headers'];
   user?: {
     id: string;
     email?: string;
